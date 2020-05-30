@@ -4,24 +4,24 @@
 module tb_Bit;
    /*autowire*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
-   wire                 out;                    // From uut of Bit.v
+   wire                 q;                      // From uut of Bit.v
    // End of automatics
    /*autoreginput*/
    // Beginning of automatic reg inputs (for undeclared instantiated-module inputs)
    reg                  clk;                    // To uut of Bit.v
-   reg                  in;                     // To uut of Bit.v
+   reg                  d;                      // To uut of Bit.v
    reg                  load;                   // To uut of Bit.v
-   reg reset;
    // End of automatics
+   reg reset;
 
    Bit #(/*autoinstparam*/) 
    uut (/*autoinst*/
         // Outputs
-        .out                            (out),
+        .q                              (q),
         // Inputs
         .clk                            (clk),
-        .in                             (in),
-        .load                           (load));
+        .load                           (load),
+        .d                              (d));
 
    localparam T = 31.25; // clock cycle is 31.25 ticks
    // setup dump and reset
@@ -44,16 +44,16 @@ module tb_Bit;
    initial begin
       // init values
       load = 0;
-      in = 0;
+      d = 0;
       // wait for negedge of reset and 1 clock
       @(negedge clk);
-      in = 1;
+      d = 1;
       @(negedge clk);
       load = 1;
-      in = 0;
+      d = 0;
       @(negedge clk);
       load = 1;
-      in = 1;
+      d = 1;
    end
 endmodule // end of tb_Bit
 
