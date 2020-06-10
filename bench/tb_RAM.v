@@ -13,7 +13,6 @@ module tb_RAM;
    reg [WIDTH-1:0]      in;                     // To uut of RAM.v
    reg                  load;                   // To uut of RAM.v
    // End of automatics
-   reg reset;
 
    RAM #(/*autoinstparam*/
          // Parameters
@@ -29,49 +28,54 @@ module tb_RAM;
         .in                             (in[WIDTH-1:0]));
 
    localparam T = 31.25; // clock cycle is 31.25 ticks
-   localparam DEPTH = 2, WIDTH = 16;
-   reg [34:0]           testvectors[20000:0];
-   reg [31:0]           vectornum, errors;
-   reg [WIDTH-1:0] expOut;
+   localparam DEPTH = 3, WIDTH = 16;
    // setup dump and reset
    initial begin
       $dumpfile("build/waveform.vcd");
       $dumpvars(0, uut);
 
       clk = 1'b1;
-      reset = 1'b1;
-      #(T/2) reset = 1'b0;
-
-      $readmemb("bench/ram-test.txt", testvectors);
-      vectornum = 0; errors = 0;
    end
 
    // clocking
    always #(T/2) clk = ~clk;
 
    // when to finish
-   initial #10000 $finish; // finish at 10000 ticks
+   initial #400 $finish; // finish at 200 ticks
 
    // other stimulus
-   always @(negedge clk) begin
-      #1;
-      if (~reset) begin
-         {in, load, address, expOut} = testvectors[vectornum];
-      end
-   end
-   always @(posedge clk) begin
-      if (~reset)
-         if ((expOut !== out)) begin
-            $display("Error, inputs = in %b, load %b, address %b", {in}, {load}, {address});
-            $display(", out = %b (expected %b)", {out}, {expOut});
-            errors = errors + 1;
-         end
-         if (testvectors[vectornum] === 34'bx) begin
-            $display ("%d tests completed with %d errors", vectornum, errors);
+   initial begin
+      // init values
+      load = 0;
+      in = 0;
+      address = 0;
+      // wait for negedge of reset and 1 clock
+      @(negedge clk);
+      // change values
+      address = 3'b000;
+      @(negedge clk);
+      in = 16'h1234;
+      load = 1;
+      @(negedge clk);
 
-            $finish;
-         end
-         vectornum= vectornum+ 1;
+      in = in + 2;
+      address = 3'b001;
+      @(negedge clk);
+
+      in = in + 2;
+      address = 3'b010;
+      @(negedge clk);
+
+      load = 0;
+      @(negedge clk);
+      address = 3'b000;
+
+      @(negedge clk);
+      address = 3'b001;
+      @(negedge clk);
+      address = 3'b010;
+      @(negedge clk);
+      address = 3'b011;
    end
 endmodule // end of tb_RAM
 
