@@ -1,0 +1,19 @@
+digraph "Bit" {
+label="Bit";
+rankdir="LR";
+remincross=true;
+n2 [ shape=octagon, label="clk", color="black", fontcolor="black" ];
+n3 [ shape=octagon, label="d", color="black", fontcolor="black" ];
+n4 [ shape=octagon, label="load", color="black", fontcolor="black" ];
+n5 [ shape=octagon, label="q", color="black", fontcolor="black" ];
+{ rank="source"; n2; n3; n4;}
+{ rank="sink"; n5;}
+c9 [ shape=record, label="{{<p6> CLK|<p7> D}|$4\n$dff|{<p8> Q}}" ];
+c14 [ shape=record, label="{{<p10> A|<p11> B|<p12> S}|$2\n$mux|{<p13> Y}}" ];
+c14:p13:e -> c9:p7:w [colorscheme="dark28", color="6", fontcolor="6", label=""];
+n2:e -> c9:p6:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+n3:e -> c14:p11:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+n4:e -> c14:p12:w [colorscheme="dark28", color="5", fontcolor="5", label=""];
+c9:p8:e -> n5:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+n5:e -> c14:p10:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+}
