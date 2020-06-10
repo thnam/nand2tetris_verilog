@@ -29,7 +29,10 @@ module tb_RAM;
         .in                             (in[WIDTH-1:0]));
 
    localparam T = 31.25; // clock cycle is 31.25 ticks
-   localparam DEPTH = 2, WIDTH = 8;
+   localparam DEPTH = 2, WIDTH = 16;
+   reg [34:0]           testvectors[20000:0];
+   reg [31:0]           vectornum, errors;
+   reg [WIDTH-1:0] expOut;
    // setup dump and reset
    initial begin
       $dumpfile("build/waveform.vcd");
@@ -38,6 +41,9 @@ module tb_RAM;
       clk = 1'b1;
       reset = 1'b1;
       #(T/2) reset = 1'b0;
+
+      $readmemb("bench/ram-test.txt", testvectors);
+      vectornum = 0; errors = 0;
    end
 
    // clocking
@@ -46,32 +52,26 @@ module tb_RAM;
    // when to finish
    initial #10000 $finish; // finish at 10000 ticks
 
-   task write;
-      begin
-         @(negedge clk);
-         load = 1;
-         in = in + 1;
-         address = address + 1;
-         @(negedge clk);
-         load = 0;
-      end
-   endtask
    // other stimulus
-   initial begin
-      // init values
-      load = 0;
-      address = 0;
-      in = 0;
-      // wait for negedge of reset and 1 clock
-      @(negedge reset);
-      @(negedge clk);
-      // change values
-      load = 1;
-      in = in + 1;
-      @(negedge clk);
-      load = 0;
-      repeat (3) write();
-      
+   always @(negedge clk) begin
+      #1;
+      if (~reset) begin
+         {in, load, address, expOut} = testvectors[vectornum];
+      end
+   end
+   always @(posedge clk) begin
+      if (~reset)
+         if ((expOut !== out)) begin
+            $display("Error, inputs = in %b, load %b, address %b", {in}, {load}, {address});
+            $display(", out = %b (expected %b)", {out}, {expOut});
+            errors = errors + 1;
+         end
+         if (testvectors[vectornum] === 34'bx) begin
+            $display ("%d tests completed with %d errors", vectornum, errors);
+
+            $finish;
+         end
+         vectornum= vectornum+ 1;
    end
 endmodule // end of tb_RAM
 

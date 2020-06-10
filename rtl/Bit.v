@@ -6,7 +6,7 @@ module Bit(
    output reg q
 );
 always @(posedge clk) begin
-   if (d)
+   if (load)
       q <= d;
 end
 endmodule

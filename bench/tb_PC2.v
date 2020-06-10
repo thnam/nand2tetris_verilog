@@ -1,7 +1,7 @@
 `timescale 1ns/100ps
 `define IVERILOG 1
 
-module tb_PC;
+module tb_PC2;
    /*autowire*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
    wire [WIDTH-1:0]     out;                    // From uut of PC.v
@@ -30,51 +30,43 @@ module tb_PC;
 
    localparam T = 31.25; // clock cycle is 31.25 ticks
    localparam WIDTH = 16;
+   reg [34:0]           testvectors[100:0];
+   reg [31:0]           vectornum, errors;
+   reg [WIDTH-1:0] expOut;
    // setup dump and reset
    initial begin
       $dumpfile("build/waveform.vcd");
       $dumpvars(0, uut);
 
-      clk = 1'b1;
-      reset = 1'b1;
-      #(T/2) reset = 1'b0;
+      $readmemb("bench/pc-test.txt", testvectors);
+      vectornum = 0; errors = 0;
+      reset = 1;
+      clk = 0;
    end
 
-   // clocking
    always #(T/2) clk = ~clk;
 
-   // when to finish
-   initial #10000 $finish; // finish at 200 ticks
 
    // other stimulus
-   initial begin
-      // init values
-      inc = 0;
-      load = 0;
-      in = 16'h1A2B;
-      // wait for negedge of reset and 1 clock
-      @(negedge reset);
-      @(negedge clk);
-      // change values
-      repeat (10) @(negedge clk);
-      load = 1;
-      @(negedge clk);
-      load = 0;
-      repeat (10) @(negedge clk);
-      load = 1;
-      @(negedge clk);
-      @(negedge clk);
-      @(negedge clk);
-      load = 0;
-      @(negedge clk);
-      reset = 1;
-      @(negedge clk);
-      reset = 0;
-      repeat (10) @(negedge clk);
-      inc = 1;
-      @(negedge clk);
-      repeat (10) @(negedge clk);
-      inc = 0;
+   always @(negedge clk) begin
+      #1
+      {in, reset, load, inc, expOut} <= testvectors[vectornum];
+   end
+
+   always @(posedge clk) begin
+      #1
+      // $display("line %d: in %b, reset %b, load %b, inc %b, out %b, expOut %b",
+         // {vectornum}, {in}, {reset}, {load}, {inc}, {out}, {expOut});
+      if ((expOut !== out)) begin
+         $display("Error at %d, inputs = in %b, load %b, ", {vectornum}, {in}, {load});
+         $display(", out = %b (expected %b)", {out}, {expOut});
+         errors = errors + 1;
+      end
+      if (testvectors[vectornum] === 35'bx) begin
+         $display ("%d tests completed with %d errors", vectornum, errors);
+         $finish;
+      end
+      vectornum = vectornum + 1;
    end
 endmodule // end of tb_PC
 

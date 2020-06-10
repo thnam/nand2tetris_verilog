@@ -1,20 +1,25 @@
+`default_nettype none
+
 module PC #(parameter WIDTH=16)(
   input wire clk,
   input wire load,
   input wire reset,
+  input wire inc,
   input wire [WIDTH-1:0] in,
   output wire [WIDTH-1:0] out
 );
-reg [WIDTH-1:0] counter;
-assign out = counter;
-always @(posedge clk or posedge reset) begin
+
+reg [WIDTH-1:0] obuff;
+assign out = obuff;
+
+always @(posedge clk ) begin
    if (reset) begin
-      counter <= 0;
+      obuff <= 0;
    end else begin
       if (load)
-         counter <= in;
-      else
-         counter <= counter + 1;
+         obuff <= in;
+      else if (inc)
+         obuff <= obuff + 1;
    end
 end
 endmodule

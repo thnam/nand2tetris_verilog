@@ -1,13 +1,11 @@
 `default_nettype none
 module Reg #(parameter WIDTH=16) (
-   input wire clk, reset,
+   input wire clk, load,
    input wire [WIDTH-1:0] d,
    output reg [WIDTH-1:0] q);
 
-always @(posedge clk, posedge reset)
-   if (reset)
-      q <= 0;
-   else
+always @(posedge clk)
+   if (load)
       q <= d;
 
 endmodule

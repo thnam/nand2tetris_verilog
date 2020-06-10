@@ -20,7 +20,7 @@ module aluTB;
    reg                  zy;                     // To aluUUT of ALU.v
    // End of automatics
 
-   alu uut(/*autoinst*/
+   ALU uut(/*autoinst*/
       // Outputs
       .out                      (out[15:0]),
       .zr                       (zr),

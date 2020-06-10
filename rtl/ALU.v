@@ -1,5 +1,5 @@
 `default_nettype none
-module alu (/*autoarg*/
+module ALU (/*autoarg*/
    input wire [15:0] x,
    input wire [15:0] y,
    input wire        zx,
