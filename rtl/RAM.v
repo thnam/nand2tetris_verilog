@@ -12,7 +12,7 @@ module RAM #(
 );
 
 // signal declaration
-reg [WIDTH-1:0] array_reg [2**DEPTH-1:0];
+reg [WIDTH-1:0] array_reg [2**DEPTH - 1:0];
 
 assign out = array_reg[address];
 
