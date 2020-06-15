@@ -6,13 +6,13 @@ module JumpControl(
 
 wire oJmpNeg, oJmpPos, oJmpZero;
 
-assign oJmpPos = jmpPos & (~ng) & (~zr);
-assign oJmpNeg = jmpNeg & ng;
-assign oJmpZero = jmpZero & zr;
+assign oJmpPos = jmpPos && (!ng) && (!zr);
+assign oJmpNeg = jmpNeg && ng;
+assign oJmpZero = jmpZero && zr;
 
-wire doJmp = oJmpPos | oJmpNeg | oJmpZero;
+wire doJmp = oJmpPos || oJmpNeg || oJmpZero;
 assign jmp = doJmp;
-assign noJmp = ~doJmp;
+assign noJmp = !doJmp;
 
 endmodule
 // Local Variables:

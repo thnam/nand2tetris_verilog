@@ -11,7 +11,7 @@ module CPU(
 );
 
 localparam WIDTH = 16;
-wire AorM, zx, nx, zy, ny, f, no, loadM, loadD, loadA, jmpPos, jmpZero, jmpNeg, Atype;
+wire AorM, zx, nx, zy, ny, f, no, loadM, loadD, loadA, jmpPos, jmpZero, jmpNeg;
 wire ng, zr, jmp, noJmp;
 wire [15:0] A, D, y, outALU;
 assign y = AorM ? inM : A;
@@ -35,7 +35,6 @@ InstructionDecoder instDecode (/*autoinst*/
    .jmpPos          (jmpPos),
    .jmpZero         (jmpZero),
    .jmpNeg          (jmpNeg),
-   .Atype           (Atype),
    // Inputs
    .instruction     (instruction[15:0]));
 
@@ -78,10 +77,14 @@ PC #(.WIDTH(16)) pcounter (/*autoinst*/
    .inc                             (noJmp),
    .in                              (A[WIDTH-1:0]));
 
+// ARegIn: take instruction if it is an A-instruction, or outALU on
+// C-instruction
 wire [15:0] ARegIn;
-assign ARegIn = Atype ? instruction : outALU;
+assign ARegIn = instruction[15] ? outALU : instruction;
 wire loadAReg;
-assign loadAReg = loadA | Atype;
+// load A reg when this is an A-instruction, or told to do so in
+// a C-instruction
+assign loadAReg = loadA || (!instruction[15]);
 
 Reg #(.WIDTH(16)) AReg (/*autoinst*/
    // Outputs
