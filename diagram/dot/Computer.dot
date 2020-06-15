@@ -1,0 +1,36 @@
+digraph "Computer" {
+label="Computer";
+rankdir="LR";
+remincross=true;
+n1 [ shape=diamond, label="addressM", color="black", fontcolor="black" ];
+n2 [ shape=octagon, label="clk", color="black", fontcolor="black" ];
+n3 [ shape=diamond, label="inM", color="black", fontcolor="black" ];
+n4 [ shape=diamond, label="instruction", color="black", fontcolor="black" ];
+n5 [ shape=octagon, label="kbIn", color="black", fontcolor="black" ];
+n6 [ shape=diamond, label="outM", color="black", fontcolor="black" ];
+n7 [ shape=diamond, label="pc", color="black", fontcolor="black" ];
+n8 [ shape=octagon, label="reset", color="black", fontcolor="black" ];
+n9 [ shape=diamond, label="writeM", color="black", fontcolor="black" ];
+{ rank="source"; n2; n5; n8;}
+{ rank="sink";}
+c10 [ shape=record, label="{{<p2> clk|<p3> inM|<p4> instruction|<p8> reset}|cpu\nCPU|{<p1> addressM|<p6> outM|<p7> pc|<p9> writeM}}" ];
+c15 [ shape=record, label="{{<p11> address|<p2> clk|<p12> in|<p5> kbIn|<p13> load}|ram\nMemory|{<p14> out}}" ];
+c16 [ shape=record, label="{{<p11> address|<p2> clk}|rom\nROM32K|{<p14> out}}" ];
+c10:p1:e -> n1:w [colorscheme="dark28", color="6", fontcolor="6", style="setlinewidth(3)", label=""];
+n1:e -> c15:p11:w [colorscheme="dark28", color="6", fontcolor="6", style="setlinewidth(3)", label=""];
+n2:e -> c10:p2:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+n2:e -> c15:p2:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+n2:e -> c16:p2:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+c15:p14:e -> n3:w [colorscheme="dark28", color="7", fontcolor="7", style="setlinewidth(3)", label=""];
+n3:e -> c10:p3:w [colorscheme="dark28", color="7", fontcolor="7", style="setlinewidth(3)", label=""];
+c16:p14:e -> n4:w [colorscheme="dark28", color="5", fontcolor="5", style="setlinewidth(3)", label=""];
+n4:e -> c10:p4:w [colorscheme="dark28", color="5", fontcolor="5", style="setlinewidth(3)", label=""];
+n5:e -> c15:p5:w [colorscheme="dark28", color="7", fontcolor="7", style="setlinewidth(3)", label=""];
+c10:p6:e -> n6:w [colorscheme="dark28", color="2", fontcolor="2", style="setlinewidth(3)", label=""];
+n6:e -> c15:p12:w [colorscheme="dark28", color="2", fontcolor="2", style="setlinewidth(3)", label=""];
+c10:p7:e -> n7:w [colorscheme="dark28", color="5", fontcolor="5", style="setlinewidth(3)", label=""];
+n7:e -> c16:p11:w [colorscheme="dark28", color="5", fontcolor="5", style="setlinewidth(3)", label=""];
+n8:e -> c10:p8:w [colorscheme="dark28", color="1", fontcolor="1", label=""];
+c10:p9:e -> n9:w [colorscheme="dark28", color="8", fontcolor="8", label=""];
+n9:e -> c15:p13:w [colorscheme="dark28", color="8", fontcolor="8", label=""];
+}
