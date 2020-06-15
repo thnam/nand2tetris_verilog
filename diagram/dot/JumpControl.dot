@@ -1,0 +1,50 @@
+digraph "JumpControl" {
+label="JumpControl";
+rankdir="LR";
+remincross=true;
+n5 [ shape=diamond, label="doJmp", color="black", fontcolor="black" ];
+n6 [ shape=octagon, label="jmp", color="black", fontcolor="black" ];
+n7 [ shape=octagon, label="jmpNeg", color="black", fontcolor="black" ];
+n8 [ shape=octagon, label="jmpPos", color="black", fontcolor="black" ];
+n9 [ shape=octagon, label="jmpZero", color="black", fontcolor="black" ];
+n10 [ shape=octagon, label="ng", color="black", fontcolor="black" ];
+n11 [ shape=octagon, label="noJmp", color="black", fontcolor="black" ];
+n12 [ shape=diamond, label="oJmpNeg", color="black", fontcolor="black" ];
+n13 [ shape=diamond, label="oJmpPos", color="black", fontcolor="black" ];
+n14 [ shape=diamond, label="oJmpZero", color="black", fontcolor="black" ];
+n15 [ shape=octagon, label="zr", color="black", fontcolor="black" ];
+{ rank="source"; n10; n15; n7; n8; n9;}
+{ rank="sink"; n11; n6;}
+c19 [ shape=record, label="{{<p16> A|<p17> B}|$5\n$and|{<p18> Y}}" ];
+c20 [ shape=record, label="{{<p16> A|<p17> B}|$6\n$and|{<p18> Y}}" ];
+c21 [ shape=record, label="{{<p16> A|<p17> B}|$2\n$and|{<p18> Y}}" ];
+c22 [ shape=record, label="{{<p16> A|<p17> B}|$4\n$and|{<p18> Y}}" ];
+c23 [ shape=record, label="{{<p16> A}|$9\n$not|{<p18> Y}}" ];
+c24 [ shape=record, label="{{<p16> A}|$1\n$not|{<p18> Y}}" ];
+c25 [ shape=record, label="{{<p16> A}|$3\n$not|{<p18> Y}}" ];
+c26 [ shape=record, label="{{<p16> A|<p17> B}|$7\n$or|{<p18> Y}}" ];
+c27 [ shape=record, label="{{<p16> A|<p17> B}|$8\n$or|{<p18> Y}}" ];
+x0 [shape=box, style=rounded, label="BUF"];
+c21:p18:e -> c22:p16:w [colorscheme="dark28", color="6", fontcolor="6", label=""];
+n10:e -> c19:p17:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+n10:e -> c24:p16:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+c23:p18:e -> n11:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+c19:p18:e -> n12:w [colorscheme="dark28", color="5", fontcolor="5", label=""];
+n12:e -> c26:p17:w [colorscheme="dark28", color="5", fontcolor="5", label=""];
+c22:p18:e -> n13:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+n13:e -> c26:p16:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+c20:p18:e -> n14:w [colorscheme="dark28", color="2", fontcolor="2", label=""];
+n14:e -> c27:p17:w [colorscheme="dark28", color="2", fontcolor="2", label=""];
+n15:e -> c20:p17:w [colorscheme="dark28", color="5", fontcolor="5", label=""];
+n15:e -> c25:p16:w [colorscheme="dark28", color="5", fontcolor="5", label=""];
+c24:p18:e -> c21:p17:w [colorscheme="dark28", color="1", fontcolor="1", label=""];
+c25:p18:e -> c22:p17:w [colorscheme="dark28", color="8", fontcolor="8", label=""];
+c26:p18:e -> c27:p16:w [colorscheme="dark28", color="7", fontcolor="7", label=""];
+c27:p18:e -> n5:w [colorscheme="dark28", color="3", fontcolor="3", label=""];
+n5:e -> c23:p16:w [colorscheme="dark28", color="3", fontcolor="3", label=""];
+n5:e -> x0:w:w [colorscheme="dark28", color="3", fontcolor="3", label=""];
+x0:e:e -> n6:w [colorscheme="dark28", color="6", fontcolor="6", label=""];
+n7:e -> c19:p16:w [colorscheme="dark28", color="8", fontcolor="8", label=""];
+n8:e -> c21:p16:w [colorscheme="dark28", color="4", fontcolor="4", label=""];
+n9:e -> c20:p16:w [colorscheme="dark28", color="3", fontcolor="3", label=""];
+}
